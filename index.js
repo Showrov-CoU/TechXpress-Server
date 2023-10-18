@@ -35,10 +35,15 @@ async function run() {
     });
 
     app.post("/brand", async (req, res) => {
-      console.log("Yes Post");
-
       const data = req.body;
       const result = await brandCollection.insertMany(data);
+      //res.send("ok");
+      res.send(result);
+    });
+
+    app.post("/product", async (req, res) => {
+      const data = req.body;
+      const result = await productCollection.insertMany(data);
       //res.send("ok");
       res.send(result);
     });
