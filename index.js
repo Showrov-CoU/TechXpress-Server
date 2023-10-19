@@ -94,9 +94,16 @@ async function run() {
 
     app.post("/product", async (req, res) => {
       const data = req.body;
-      const result = await productCollection.insertMany(data);
+      if (data.length > 1) {
+        const result = await productCollection.insertMany(data);
+        res.send(result);
+      } else {
+        const result = await productCollection.insertOne(data);
+        res.send(result);
+      }
+
       //res.send("ok");
-      res.send(result);
+      console.log("come from add product");
     });
 
     app.delete("/mycart/:id", async (req, res) => {
