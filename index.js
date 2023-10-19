@@ -55,7 +55,7 @@ async function run() {
     // for view details product
     app.get("/productdetails/:id", async (req, res) => {
       const id = req.params.id;
-      console.log(id);
+      //   console.log(id);
       const query = { _id: new ObjectId(id) };
       const product = await productCollection.findOne(query);
 
@@ -68,10 +68,18 @@ async function run() {
       const brands = await cursor.toArray();
       res.send(brands);
     });
+    // app.get("/mycart/:id", async (req, res) => {
+    //   const id = req.params.id;
+    //   const query = { _id: id };
+    //   const result = await myCartCollection.findOne(query);
+
+    //   res.send(result);
+    // });
 
     //store product to mycart
     app.post("/mycart", async (req, res) => {
       const data = req.body;
+      //   console.log(data._id, "jsj");
       const result = await myCartCollection.insertOne(data);
       res.send(result);
     });
@@ -91,7 +99,16 @@ async function run() {
       res.send(result);
     });
 
-    app.post("/brand", async (req, res) => {});
+    app.delete("/mycart/:id", async (req, res) => {
+      const id = req.params.id;
+      //console.log(id);
+      const query = { _id: id };
+      console.log(query);
+      const result = await myCartCollection.deleteOne(query);
+      console.log(result);
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
