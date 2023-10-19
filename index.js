@@ -103,7 +103,27 @@ async function run() {
       }
 
       //res.send("ok");
-      console.log("come from add product");
+      // console.log("come from add product");
+    });
+
+    app.put("/product/:id", async (req, res) => {
+      const id = req.params.id;
+      const updateProduct = req.body;
+      const query = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const product = {
+        $set: {
+          image: updateProduct.image,
+          productName: updateProduct.productName,
+          brandName: updateProduct.brandName,
+          type: updateProduct.type,
+          price: updateProduct.price,
+          rating: updateProduct.rating,
+          description: updateProduct.description,
+        },
+      };
+      const result = await productCollection.updateOne(query, product, options);
+      res.send(result);
     });
 
     app.delete("/mycart/:id", async (req, res) => {
