@@ -30,6 +30,10 @@ async function run() {
     const productCollection = database.collection("products");
     const myCartCollection = database.collection("myCart");
 
+    app.get("/", async (req, res) => {
+      res.send("Server is running");
+    });
+
     app.get("/brand", async (req, res) => {
       const cursor = await brandCollection.find();
       const brands = await cursor.toArray();
