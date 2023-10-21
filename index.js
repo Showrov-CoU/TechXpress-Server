@@ -48,7 +48,7 @@ app.get("/brand", async (req, res) => {
 app.get("/product/:brandName", async (req, res) => {
   const brandName = req.params.brandName;
   const query = { brandName: brandName };
-  const cursor = await productCollection.find(query);
+  const cursor = productCollection.find(query);
   const products = await cursor.toArray();
   res.send(products);
 });
@@ -67,8 +67,17 @@ app.get("/productdetails/:id", async (req, res) => {
   res.send(product);
 });
 
+// get productCart for logged in user
+app.get("/mycart/:email", async (req, res) => {
+  const email = req.params.email;
+  const query = { email: email };
+  const cursor = myCartCollection.find(query);
+  const products = await cursor.toArray();
+  res.send(products);
+});
+
 app.get("/mycart", async (req, res) => {
-  const cursor = await myCartCollection.find();
+  const cursor = myCartCollection.find();
   const brands = await cursor.toArray();
   res.send(brands);
 });
@@ -76,7 +85,6 @@ app.get("/mycart", async (req, res) => {
 //store product to mycart
 app.post("/mycart", async (req, res) => {
   const data = req.body;
-  //   console.log(data._id, "jsj");
   const result = await myCartCollection.insertOne(data);
   res.send(result);
 });
@@ -85,7 +93,6 @@ app.post("/mycart", async (req, res) => {
 app.post("/brand", async (req, res) => {
   const data = req.body;
   const result = await brandCollection.insertMany(data);
-  //res.send("ok");
   res.send(result);
 });
 
@@ -122,7 +129,7 @@ app.put("/product/:id", async (req, res) => {
 
 app.delete("/mycart/:id", async (req, res) => {
   const id = req.params.id;
-  const query = { _id: id };
+  const query = { _id: new ObjectId(id) };
   console.log(query);
   const result = await myCartCollection.deleteOne(query);
   res.send(result);
